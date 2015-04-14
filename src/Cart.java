@@ -92,23 +92,59 @@ public class Cart extends HttpServlet {
 		id.next();
 		int customer_id = Integer.parseInt(id.getString("id"));
 		
+		int movie_id = Integer.parseInt(request.getParameter("MovieID"));
+		String movie_check = "Select * from cart where title in "
+				+ "(Select distinct(title) from movies where id = '" + movie_id + "')"
+						+ " and customer_id = '" + customer_id + "';";
+		PreparedStatement ps_cart_check = (PreparedStatement) connection.prepareStatement(movie_check);
+		ResultSet cart_check = ps_cart_check.executeQuery();
+		
+		if (cart_check.next())
+		{
+			String update = "update cart set quantity = " + Integer.parseInt(cart_check.getString("quantity"))+1 + " where title in "
+					+ "(Select distinct(title) from movies where id = '" + movie_id + "')"
+							+ " and customer_id = '" + customer_id + "';";
+			PreparedStatement ps_cart_update = (PreparedStatement) connection.prepareStatement(update);
+			ps_cart_update.executeUpdate();
+		}
+		else
+		{
+			String movie = "Select * from movies where id = '" + movie_id + "';";
+			PreparedStatement ps_movie = (PreparedStatement) connection.prepareStatement(movie);
+			ResultSet movies = ps_movie.executeQuery();
+			movies.next();
+			String insert = "INSERT INTO cart ('title', 'price', 'quantity', 'customer_id', 'movie_id') "
+					+ "VALUES ('" + movies.getString("title") +  "(" + movies.getString("year") + ")', '12.35', '1', '" + customer_id + "', '" + movie_id + "');";
+			PreparedStatement ps_cart_insert = (PreparedStatement) connection.prepareStatement(insert);
+			ps_cart_insert.executeUpdate();
+		}
+		
 		String query = "Select * from cart where customer_id like '" + customer_id + "'";
 		PreparedStatement ps_cart = (PreparedStatement) connection.prepareStatement(query);
 		ResultSet cart = ps_cart.executeQuery();
+		
 		PrintWriter out = response.getWriter();
 		
 		out.println("<HTML><HEAD><TITLE>login</TITLE></HEAD>");
 		out.println("<BODY><H1 ALIGN=\"CENTER\">Shopping Cart</H1></CENTER>");
 		out.println("<table border>"
-				+ "<td><th>Movie Title</th></td>");
+				+ "<tr><th>Movie Title</th>"
+				+ "<th>Price</th>"
+				+ "<th>Quantity</th>"
+				+ "<th>Update</th>"
+				+ "<th>Remove</th></tr>");
 		
 		while(cart.next())
 		{
-			
+			out.println("<tr><td>" + cart.getString("title") + "</td>");
+			out.println("<td>" + cart.getString("price") + "</td>");
+			out.println("<td>" + cart.getString("quantity") + "</td>");
+			out.println("<td>" + cart.getString("quantity") + "</td>");
+			out.println("<td>" + cart.getString("quantity") + "</td></tr>");
 		}
 		
 		 
-		 
+		out.println("</table>");
 		out.println("</BODY></HTML>");
 	}
 

@@ -24,6 +24,9 @@ public class index extends HttpServlet {
 	private static final long serialVersionUID = 1L;
 	private DataSource dataSource;
     private Connection connection;
+    private static String User = null;
+    private static String Pass = null;
+    private static String Page = null;
     /**
      * @see HttpServlet#HttpServlet()
      */
@@ -78,7 +81,20 @@ public class index extends HttpServlet {
 		      //    if(message !=null)
 				 if (rs.next())
 				 {
-					 response.sendRedirect("/FabFlix/MovieList");
+					HttpSession session = request.getSession();
+				    synchronized(session) 
+				    {
+				         session.setAttribute("User", username);
+				         session.setAttribute("Pass", password);
+				         String temp = "";
+				         session.setAttribute("Page", temp);
+				         if (temp.isEmpty())
+				        	 Page = "/FabFlix/MovieList";
+				         else
+				        	 Page = temp;
+				    }	
+					 response.sendRedirect(Page);
+					 
 				 }else{
 				String mess="Username or password incorrect";
 		 response.sendRedirect("/FabFlix/index.html?message="+mess);  
