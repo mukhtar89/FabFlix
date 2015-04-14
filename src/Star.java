@@ -74,8 +74,8 @@ public class Star extends HttpServlet {
 		
 		String message = request.getParameter("message");
 		out.println("<HTML><HEAD><TITLE>login</TITLE></HEAD>");
-		 out.println("<BODY><H1 ALIGN=\"CENTER\">Star Details</H1>");
-		 out.println("</CENTER></FORM></BODY></HTML>");
+		 out.println("<BODY><H1 ALIGN=\"CENTER\">Star Details</H1></CENTER>");
+		 out.println("<a href=\"javascript:history.go(-1)\">Go back to previous page</a>");
 		 out.println("<style>"
 				+ "#container {"
 				+ "padding:10%"
@@ -130,7 +130,9 @@ public class Star extends HttpServlet {
 			response.sendRedirect("/FabFlix/index.html?message="+mess);  
 			out.println("<tr>" + "<td>" + message+ "</td>" +"</tr>");
 		}
+		out.println("</BODY></HTML>");
 	}
+	
 
 	
 	

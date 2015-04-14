@@ -64,6 +64,7 @@ public class Movie extends HttpServlet {
 		out.println("<HTML><HEAD><TITLE>login</TITLE></HEAD>");
 		 out.println("<BODY><H1 ALIGN=\"CENTER\">Movie Details</H1>");
 		 out.println("</CENTER></FORM></BODY></HTML>");
+		 out.println("<a href=\"javascript:history.go(-1)\">Go back to previous page</a>");
 		 out.println("<style>"
 				+ "#container {"
 				+ "padding:10%"
