@@ -83,7 +83,8 @@ public class MovieList extends HttpServlet {
 		 		+ "}"
 		 		+ "</style>");
 		out.println("<HEAD><TITLE>login</TITLE></HEAD>");
-		 out.println("<BODY><H1 ALIGN=\"CENTER\">Movie Details</H1></CENTER>");
+		out.println("<BODY><H1 ALIGN=\"CENTER\">Movie Details</H1></CENTER>");
+		out.println("<h4 align=\"right\"><a href=\"/FabFlix/Cart?MovieID=0\">My Cart</a></h4><br>");
 		if (movies.next())
 		{
 			do
@@ -104,7 +105,7 @@ public class MovieList extends HttpServlet {
 				out.println("<img style=\"width:110;height;160;\"src=\"" + movies.getString("banner_url")
 						+ "\" alt=\"" + movies.getString("title") + " DVD Cover\"><br><br>");
 				out.println("<button type=\"button\" style=\"padding:10px;background-color:blue;color:white;\""
-						+ "onclick=\"window.location='/FabFlix/Cart?MovieID=" + movies.getString("id") + "';\">Add to Cart</button></div>");
+						+ "onclick=\"window.location.href='/FabFlix/Cart?MovieID=" + movies.getString("id") + "&qty=1&req=add';\">Add to Cart</button></div>");
 				out.println("<span class=\"title\">Movie = </span>"
 						+ "<a class=\"title\" href=\"/FabFlix/Movie?MovieID=" + movies.getString("id") + "\">" + movies.getString("title") + "</a><br>");
 				out.println("<span class=\"title\">Year = " + movies.getString("year") + "</span><br>");

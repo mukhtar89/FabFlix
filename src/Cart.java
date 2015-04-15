@@ -86,6 +86,7 @@ public class Cart extends HttpServlet {
 	public void print(HttpServletResponse response, HttpServletRequest request) throws SQLException, IOException
 	{
 		connection = (Connection) dataSource.getConnection();
+		PrintWriter out = response.getWriter();
 		String custid = "Select id from customers where first_name = '" + User + "' and password = '" + Pass + "';";
 		PreparedStatement ps_custid = (PreparedStatement) connection.prepareStatement(custid);
 		ResultSet id = ps_custid.executeQuery();
@@ -93,40 +94,57 @@ public class Cart extends HttpServlet {
 		int customer_id = Integer.parseInt(id.getString("id"));
 		
 		int movie_id = Integer.parseInt(request.getParameter("MovieID"));
-		String movie_check = "Select * from cart where title in "
-				+ "(Select distinct(title) from movies where id = '" + movie_id + "')"
-						+ " and customer_id = '" + customer_id + "';";
-		PreparedStatement ps_cart_check = (PreparedStatement) connection.prepareStatement(movie_check);
-		ResultSet cart_check = ps_cart_check.executeQuery();
-		
-		if (cart_check.next())
+		if (movie_id != 0)
 		{
-			String update = "update cart set quantity = " + Integer.parseInt(cart_check.getString("quantity"))+1 + " where title in "
-					+ "(Select distinct(title) from movies where id = '" + movie_id + "')"
-							+ " and customer_id = '" + customer_id + "';";
-			PreparedStatement ps_cart_update = (PreparedStatement) connection.prepareStatement(update);
-			ps_cart_update.executeUpdate();
-		}
-		else
-		{
-			String movie = "Select * from movies where id = '" + movie_id + "';";
-			PreparedStatement ps_movie = (PreparedStatement) connection.prepareStatement(movie);
-			ResultSet movies = ps_movie.executeQuery();
-			movies.next();
-			String insert = "INSERT INTO cart ('title', 'price', 'quantity', 'customer_id', 'movie_id') "
-					+ "VALUES ('" + movies.getString("title") +  "(" + movies.getString("year") + ")', '12.35', '1', '" + customer_id + "', '" + movie_id + "');";
-			PreparedStatement ps_cart_insert = (PreparedStatement) connection.prepareStatement(insert);
-			ps_cart_insert.executeUpdate();
+			String movie_check = "Select * from cart where movie_id = '" + movie_id + "' and customer_id = '" + customer_id + "';";
+			PreparedStatement ps_cart_check = (PreparedStatement) connection.prepareStatement(movie_check);
+			ResultSet cart_check = ps_cart_check.executeQuery();
+			
+			String req = request.getParameter("req");
+			if (cart_check.next() && !req.equals("del"))
+			{
+				out.println("<HTML>In cart_check.next()");
+				int qty = Integer.parseInt(request.getParameter("qty"));
+				qty += Integer.parseInt(cart_check.getString("quantity"));
+				String update = "update `moviedb`.`cart` set `quantity` = '" + qty + "' where "
+						+ "`movie_id` =  '" + movie_id + "' and `customer_id` = '" + customer_id + "';";
+				PreparedStatement ps_cart_update = (PreparedStatement) connection.prepareStatement(update);
+				ps_cart_update.executeUpdate();
+			}
+			else
+			{
+				if (req.equals("add"))
+				{
+					out.println("<HTML>In rem_flag = false");
+					String movie = "Select * from movies where id = '" + movie_id + "';";
+					PreparedStatement ps_movie = (PreparedStatement) connection.prepareStatement(movie);
+					ResultSet movies = ps_movie.executeQuery();
+					movies.next();
+					String insert = "INSERT INTO cart (`title`, `price`, `quantity`, `customer_id`, `movie_id`) "
+							+ "VALUES ('" + movies.getString("title") +  "(" + movies.getString("year") + ")', '12.35', '1', '" + customer_id + "', '" + movie_id + "');";
+					PreparedStatement ps_cart_insert = (PreparedStatement) connection.prepareStatement(insert);
+					ps_cart_insert.executeUpdate();
+				}
+				else if (req.equals("del"))
+				{
+					out.println("<HTML>In rem_flag = true");
+					String remove = "DELETE from `moviedb`.`cart` where `customer_id` = '" + customer_id + "' and `movie_id` = '" + movie_id + "';";
+					PreparedStatement ps_cart_remove = (PreparedStatement) connection.prepareStatement(remove);
+					ps_cart_remove.executeUpdate();
+				}
+			}
 		}
 		
 		String query = "Select * from cart where customer_id like '" + customer_id + "'";
 		PreparedStatement ps_cart = (PreparedStatement) connection.prepareStatement(query);
 		ResultSet cart = ps_cart.executeQuery();
 		
-		PrintWriter out = response.getWriter();
-		
-		out.println("<HTML><HEAD><TITLE>login</TITLE></HEAD>");
+		out.println("<HEAD><TITLE>login</TITLE></HEAD>");
 		out.println("<BODY><H1 ALIGN=\"CENTER\">Shopping Cart</H1></CENTER>");
+		out.println("<BODY><H4 ALIGN=\"CENTER\">" + User + " " + Pass + "</H4></CENTER>");
+		out.println("<BODY><H4 ALIGN=\"CENTER\">" + request.getParameter("MovieID") + "</H4></CENTER>");
+		out.println("<BODY><H4 ALIGN=\"CENTER\">" + request.getParameter("req") + "</H4></CENTER>");
+		out.println("<BODY><H4 ALIGN=\"CENTER\">" + request.getParameter("qty") + "</H4></CENTER>");
 		out.println("<table border>"
 				+ "<tr><th>Movie Title</th>"
 				+ "<th>Price</th>"
@@ -134,17 +152,29 @@ public class Cart extends HttpServlet {
 				+ "<th>Update</th>"
 				+ "<th>Remove</th></tr>");
 		
+		int iter_form = 0;
 		while(cart.next())
 		{
 			out.println("<tr><td>" + cart.getString("title") + "</td>");
 			out.println("<td>" + cart.getString("price") + "</td>");
-			out.println("<td>" + cart.getString("quantity") + "</td>");
-			out.println("<td>" + cart.getString("quantity") + "</td>");
-			out.println("<td>" + cart.getString("quantity") + "</td></tr>");
+			out.println("<form id=\"form" + iter_form  + "\"><td><input type=\"text\" name=\"quantity\" value=" + cart.getString("quantity") + "></form></td>");
+			out.println("<td><button onclick=\"operation('add')\">Update</button></td>");
+			out.println("<td><button onclick=\"operation('del')\">Delete</button></td></tr>");
+			out.println("<script> function operation(opt) {"
+					+ "var x = document.getElementById(\"form" + iter_form  + "\");"
+					+ "var quant = x.elements[0].value;"
+					+ "var url = \"/FabFlix/Cart?MovieID=" + cart.getString("movie_id") + "&qty=\";"
+					+ "url += quant;"
+					+ "url += \"&req=\";"
+					+ "url += opt;"
+					+ "window.location.href=url;}"
+					+ "</script>");
+			iter_form++;
 		}
+		out.println("</table>");
 		
 		 
-		out.println("</table>");
+
 		out.println("</BODY></HTML>");
 	}
 
