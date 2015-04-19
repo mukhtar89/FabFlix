@@ -117,7 +117,7 @@ public class Movie extends HttpServlet {
 				stars.first();
 				do
 				{
-					out.println("<a href=\"/FabFlix/Star?StarID=" + stars.getString("id") + "\">"
+					out.println("<a href=\"/Fabflix/Star?StarID=" + stars.getString("id") + "\">"
 							+ stars.getString("first_name") + " " + stars.getString("last_name") + "</a>");
 					if (size != 1)
 						out.println(", ");
@@ -140,7 +140,7 @@ public class Movie extends HttpServlet {
 		else
 		{
 			String mess="Username or password incorrect";
-			response.sendRedirect("/FabFlix/index.html?message="+mess);  
+			response.sendRedirect("/Fabflix/index.html?message="+mess);  
 			out.println("<tr>" + "<td>" + message+ "</td>" +"</tr>");
 		}
 	}

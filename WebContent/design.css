@@ -1,0 +1,255 @@
+#banner
+{
+   height:74px;
+   background-color:#00CCFF;
+   font-family: 'Roboto Condensed', sans-serif;
+   color:white;
+}
+.home
+{
+   float:right;
+   background-color:#00CCFF;
+   padding-top:20px;
+   padding-bottom:20px;
+   padding-left:5px;
+   padding-right:5px;
+   font-size:20px;
+   text-decoration: none;
+   color:white;
+}
+.home:hover{
+   background-color:#0099FF;
+}
+.btn_srch
+{
+   float:right;
+   background-color:#0099FF;
+   margin-right:70px;
+   margin-top:20px;
+   font-size:15px;
+   text-decoration: none;
+   color:white;
+   border-radius: 0px 8px 8px 0px;
+   border:none;
+}
+.btn_srch:hover{
+   background-color:#00CC00;
+}
+#srch_box
+{
+    border-radius: 8px 0px 0px 8px;
+    border-style: solid;
+    border-width: 3px;
+    border-color: #0099FF;
+    margin-top:20px;
+    padding: 10px; 
+    width: 300px;
+    height: 10px; 
+}
+.links
+{
+   text-decoration: none;
+   color:white;
+}
+#line { 
+    display: block;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+    margin-left: 10%;
+    margin-right: 10%;
+    border-style: inset;
+    border-width: 1px;
+    border-color:#00CCFF;
+}
+#genre_srch
+{
+   height:200px;
+   width:80%;
+   margin-left:10%;
+   margin-right:10%;
+   background-color:#00CCFF;
+   color:white;
+   margin-top:20px;
+}
+#mov_srch
+{
+   height:200px;
+   width:80%;
+   margin-right:10%;
+   margin-left:10%;
+   margin-top:20px;
+   background-color:#00CCFF;
+   color:white;
+}
+.gnr_srch
+{
+   float:left;
+   background-color:#0099FF;
+   margin:5px;
+   padding:10px;
+   font-size:15px;
+   text-decoration: none;
+   color:white;
+}
+.gnr_srch:hover{
+   background-color:#00CC00;
+}
+.title_srch
+{
+   float:left;
+   background-color:#0099FF;
+   margin:15px;
+   padding:10px;
+   font-size:15px;
+   text-decoration: none;
+   color:white;
+}
+.title_srch:hover{
+   background-color:#00CC00;
+}
+#footline
+{
+   margin-top:20px;
+   height:150px;
+   background-color:#00CCFF;
+   font-family: 'Roboto Condensed', sans-serif;
+   color:white;
+}
+#footlinks
+{
+   margin-left:30%;
+   margin-right:30%;
+   padding:20px;
+}
+.ft_links
+{
+   background-color:#0099FF;
+   margin:5px;
+   padding:5px;
+   font-size:15px;
+   text-decoration: none;
+   color:white;
+}
+.ft_links:hover{
+   background-color:white;
+   color:#0099FF;
+}
+#popular
+{
+    margin-left:10%;
+    margin-right:10%;
+    border-radius: 8px 8px 8px 8px;
+    border-style: solid;
+    border-width: 3px;
+    border-color:#00CCFF;
+    border-collapse: collapse;
+    width:80%;
+    font-family: 'Roboto Condensed', sans-serif;
+}
+.fill_head
+{
+   background-color:#00CCFF;
+   font-family: 'Roboto Condensed', sans-serif;
+   color:white;
+}
+#pop_title
+{
+   height:15px;
+   background-color:#00CCFF;
+   font-family: 'Roboto Condensed', sans-serif;
+   font-size:20px;
+   color:white;
+    margin-left:10%;
+    margin-right:10%;
+    border-radius: 8px 8px 0px 0px;
+    border-style: solid;
+    border-width: 3px;
+    border-color:#00CCFF;
+    padding:10px;
+}
+#movie
+{
+   align:center;
+   background-color:#00CCFF;
+   color:white;
+   margin:20px;
+   margin-left:18%;
+}
+#mov_list
+{
+   text-align:center;
+   background-color:#00CCFF;
+   color:white;
+}
+#mov_det
+{
+   background-color:#00CCFF;
+   color:white;
+   word-wrap: break-word;
+}
+.cart
+{
+   background-color:#00CCFF;
+   font-size:15px;
+   text-decoration: none;
+   color:white;
+   padding:5px;
+}
+.cart:hover{
+   background-color:#00CC00;
+}
+#set_font
+{
+   font-family: 'Roboto Condensed', sans-serif;
+}
+#movie_search
+{
+   align:center;
+   background-color:#00CCFF;
+   color:white;
+   margin-top:20px;
+   margin-bottom:20px;
+   margin-left:10%;
+   margin-right:10%;
+}
+.ag_links
+{
+   float:left;
+   background-color:#0099FF;
+   margin:2px;
+   padding:3px;
+   font-size:14px;
+   text-decoration: none;
+   color:white;
+}
+.ag_links:hover{
+   background-color:#00CC00;
+   color:white;
+}
+#srch_res
+{
+   width:80%;
+   align:center;
+   margin-top:20px;
+   margin-bottom:20px;
+   margin-left:10%;
+   margin-right:10%;
+   border-radius: 8px 8px 8px 8px;
+   border-style: solid;
+   border-width: 3px;
+   border-color:#00CCFF;
+   border-collapse: collapse;
+}
+.sort_links
+{
+   background-color:#0099FF;
+   margin:5px;
+   padding:10px;
+   font-size:15px;
+   text-decoration: none;
+   color:white;
+}
+.sort_links:hover{
+   background-color:white;
+   color:#0099FF;
+}

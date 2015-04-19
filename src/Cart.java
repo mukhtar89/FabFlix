@@ -28,7 +28,7 @@ public class Cart extends HttpServlet {
 	private static final long serialVersionUID = 1L;
     private static String User = null;
     private static String Pass = null;
-    private static String Page = "/FabFlix/Cart";
+    private static String Page = "/Fabflix/Cart";
 	private DataSource dataSource;
     private Connection connection;
     /**
@@ -73,8 +73,8 @@ public class Cart extends HttpServlet {
 	         Pass = (String) session.getAttribute("Pass");
 	         session.setAttribute("Page", Page);
         }
-        if (User.isEmpty() || Pass.isEmpty())
-       	 response.sendRedirect("/FabFlix/index.html");
+        if (User == null || Pass == null)
+       	 response.sendRedirect("/Fabflix/index.html");
 	    try {
 			print(response, request);
 		} catch (SQLException e) {
@@ -101,11 +101,19 @@ public class Cart extends HttpServlet {
 			ResultSet cart_check = ps_cart_check.executeQuery();
 			
 			String req = request.getParameter("req");
-			if (cart_check.next() && !req.equals("del"))
+			if (req.equals("Clear"))
+			{
+				out.println("<HTML>In Clear");
+				String removeAll = "DELETE from `moviedb`.`cart` where `customer_id` = '" + customer_id + "';";
+				PreparedStatement ps_cart_removeAll = (PreparedStatement) connection.prepareStatement(removeAll);
+				ps_cart_removeAll.executeUpdate();
+			}
+			if (cart_check.next() && !req.equals("Delete") && !req.equals("View") && !req.equals("Clear"))
 			{
 				out.println("<HTML>In cart_check.next()");
 				int qty = Integer.parseInt(request.getParameter("qty"));
-				qty += Integer.parseInt(cart_check.getString("quantity"));
+				if (req.equals("Add"))
+					qty += Integer.parseInt(cart_check.getString("quantity"));
 				String update = "update `moviedb`.`cart` set `quantity` = '" + qty + "' where "
 						+ "`movie_id` =  '" + movie_id + "' and `customer_id` = '" + customer_id + "';";
 				PreparedStatement ps_cart_update = (PreparedStatement) connection.prepareStatement(update);
@@ -113,7 +121,7 @@ public class Cart extends HttpServlet {
 			}
 			else
 			{
-				if (req.equals("add"))
+				if (req.equals("Add"))
 				{
 					out.println("<HTML>In rem_flag = false");
 					String movie = "Select * from movies where id = '" + movie_id + "';";
@@ -125,9 +133,9 @@ public class Cart extends HttpServlet {
 					PreparedStatement ps_cart_insert = (PreparedStatement) connection.prepareStatement(insert);
 					ps_cart_insert.executeUpdate();
 				}
-				else if (req.equals("del"))
+				else if (req.equals("Delete"))
 				{
-					out.println("<HTML>In rem_flag = true");
+					out.println("<HTML>In Delete");
 					String remove = "DELETE from `moviedb`.`cart` where `customer_id` = '" + customer_id + "' and `movie_id` = '" + movie_id + "';";
 					PreparedStatement ps_cart_remove = (PreparedStatement) connection.prepareStatement(remove);
 					ps_cart_remove.executeUpdate();
@@ -141,10 +149,8 @@ public class Cart extends HttpServlet {
 		
 		out.println("<HEAD><TITLE>login</TITLE></HEAD>");
 		out.println("<BODY><H1 ALIGN=\"CENTER\">Shopping Cart</H1></CENTER>");
-		out.println("<BODY><H4 ALIGN=\"CENTER\">" + User + " " + Pass + "</H4></CENTER>");
-		out.println("<BODY><H4 ALIGN=\"CENTER\">" + request.getParameter("MovieID") + "</H4></CENTER>");
-		out.println("<BODY><H4 ALIGN=\"CENTER\">" + request.getParameter("req") + "</H4></CENTER>");
-		out.println("<BODY><H4 ALIGN=\"CENTER\">" + request.getParameter("qty") + "</H4></CENTER>");
+		out.println("<h4 align=\"right\"><a href=\"/Fabflix/CustInfo\">Check Out</a></h4><br>");
+		out.println("<h4 align=\"right\"><a href=\"/Fabflix/Cart?MovieID=0&qty=0&req=Clear\">Empty Cart</a></h4><br>");
 		out.println("<table border>"
 				+ "<tr><th>Movie Title</th>"
 				+ "<th>Price</th>"
@@ -157,24 +163,13 @@ public class Cart extends HttpServlet {
 		{
 			out.println("<tr><td>" + cart.getString("title") + "</td>");
 			out.println("<td>" + cart.getString("price") + "</td>");
-			out.println("<form id=\"form" + iter_form  + "\"><td><input type=\"text\" name=\"quantity\" value=" + cart.getString("quantity") + "></form></td>");
-			out.println("<td><button onclick=\"operation('add')\">Update</button></td>");
-			out.println("<td><button onclick=\"operation('del')\">Delete</button></td></tr>");
-			out.println("<script> function operation(opt) {"
-					+ "var x = document.getElementById(\"form" + iter_form  + "\");"
-					+ "var quant = x.elements[0].value;"
-					+ "var url = \"/FabFlix/Cart?MovieID=" + cart.getString("movie_id") + "&qty=\";"
-					+ "url += quant;"
-					+ "url += \"&req=\";"
-					+ "url += opt;"
-					+ "window.location.href=url;}"
-					+ "</script>");
+			out.println("<form id=\"form" + iter_form + "\"><td><input type='text' name='qty' value=" + cart.getString("quantity") + "></td>");
+			out.println("<td><input name='req' type='submit' value='Update'></td>");
+			out.println("<td><input name='req' type='submit' value='Delete'></td>"
+					+ "<input type='hidden' name='MovieID' value='" + cart.getString("movie_id") + "'></form></tr>");
 			iter_form++;
 		}
 		out.println("</table>");
-		
-		 
-
 		out.println("</BODY></HTML>");
 	}
 

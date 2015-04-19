@@ -127,7 +127,7 @@ public class Star extends HttpServlet {
 		else
 		{
 			String mess="Username or password incorrect";
-			response.sendRedirect("/FabFlix/index.html?message="+mess);  
+			response.sendRedirect("/Fabflix/index.html?message="+mess);  
 			out.println("<tr>" + "<td>" + message+ "</td>" +"</tr>");
 		}
 		out.println("</BODY></HTML>");

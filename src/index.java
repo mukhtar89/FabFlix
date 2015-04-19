@@ -51,7 +51,7 @@ public class index extends HttpServlet {
 		 PrintWriter out = response.getWriter();
 		 String message = request.getParameter("message");
 		 out.println("<HTML><HEAD><TITLE>login</TITLE></HEAD>");
-		 out.println("<BODY><H1 ALIGN=\"CENTER\">Loginform</H1><FORM ACTION=\"/FabFlix/\" METHOD=\"POST\">"
+		 out.println("<BODY><H1 ALIGN=\"CENTER\">Loginform</H1><FORM ACTION=\"/Fabflix/\" METHOD=\"POST\">"
 		 		+ "<center> Username: <INPUT TYPE=\"TEXT\" NAME=\"Username\"><BR> Password: <INPUT TYPE=\"PASSWORD\" NAME=\"password\"><BR></center>"
 		 		+ " <CENTER><INPUT TYPE=\"SUBMIT\" VALUE=\"Submit Order\">");
 		 if(message !=null)out.println("<br>"+message+"</br>");
@@ -88,15 +88,17 @@ public class index extends HttpServlet {
 				         String temp = "";
 				         session.setAttribute("Page", temp);
 				         if (temp.isEmpty())
-				        	 Page = "/FabFlix/MovieList";
+				        	 Page = "/Fabflix/Main";
 				         else
 				        	 Page = temp;
 				    }	
+				    
+				    String mess = "Succesfully logged in";			
 					 response.sendRedirect(Page);
 					 
 				 }else{
 				String mess="Username or password incorrect";
-		 response.sendRedirect("/FabFlix/index.html?message="+mess);  
+		 response.sendRedirect("/Fabllix/index.html?message="+mess);  
 		 out.println("<tr>" + "<td>" + message+ "</td>" +"</tr>");
 		          }
 		
